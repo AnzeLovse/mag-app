@@ -6,22 +6,7 @@ Dash app for time course RNAseq visualisation
 
 
 ## Usage
-If you are on Linux and you have [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/) installed you can run the script `utility/setup_virtualenv_and_repo.sh` to:
-
-- create a python virtual environment and activate it
-- install all project dependencies from `requirements.txt`
-- create a git repository
-- create your `Initial commit`
-
-Here is how you run the script:
-
-```shell
-cd mag-app
-# mind the dot!
-. utility/setup_virtualenv_and_repo.sh
-```
-
-Then you will need to create an `.env` file where to store your environment variables (SECRET key, plotly credentials, API keys, etc). Do NOT TRACK this `.env` file. See `.env.example`.
+You will need to create an `.env` file where to store your environment variables (SECRET key, plotly credentials, API keys, etc). Do NOT TRACK this `.env` file. See `.env.example`.
 
 Run all tests with a simple:
 
