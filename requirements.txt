@@ -7,3 +7,4 @@ chart-studio==1.1.0
 pytest==6.2.2
 python-dotenv==0.16.0
 black==20.8b1
+dash-bio==0.6.1

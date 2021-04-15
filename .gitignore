@@ -17,3 +17,9 @@ tests/.cache/
 *.log
 *.db
 *.pyc
+
+# data folder
+data/
+
+# visual studio
+.vscode/
