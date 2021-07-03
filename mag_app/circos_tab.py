@@ -26,13 +26,38 @@ layout_pbtic = [
         "len": 235425,
     },
 ]
-hist_path = Path("data/histogram.json")
+hist_path = Path("data/pDG_M-1_coverage_pos.json")
 with open(hist_path, "r") as f:
     histogram_data = json.load(f)
 
-hist_pbtic_path = Path("data/histogram_pbtic.json")
+hist_path = Path("data/pDG_M-1_coverage_neg.json")
+with open(hist_path, "r") as f:
+    histogram_neg = json.load(f)
+
+hist_pbtic_path = Path("data/pDG_M-1_coverage_pos_pbtic.json")
 with open(hist_pbtic_path, "r") as f:
     histogram_pbtic = json.load(f)
+
+hist_pbtic_path = Path("data/pDG_M-1_coverage_neg_pbtic.json")
+with open(hist_pbtic_path, "r") as f:
+    histogram_pbtic_neg = json.load(f)
+
+hist_path = Path("data/pDG7_M-1_coverage_pos.json")
+with open(hist_path, "r") as f:
+    pdg7_pos = json.load(f)
+
+hist_path = Path("data/pDG7_M-1_coverage_neg.json")
+with open(hist_path, "r") as f:
+    pdg7_neg = json.load(f)
+
+hist_pbtic_path = Path("data/pDG7_M-1_coverage_pos_pbtic.json")
+with open(hist_pbtic_path, "r") as f:
+    pdg7_pbtic_pos = json.load(f)
+
+hist_pbtic_path = Path("data/pDG7_M-1_coverage_neg_pbtic.json")
+with open(hist_pbtic_path, "r") as f:
+    pdg7_pbtic_neg = json.load(f)
+
 
 annot_pos_path = Path("data/annotation_pos.json")
 with open(annot_pos_path, "r") as f:
@@ -43,7 +68,9 @@ with open(annot_neg_path, "r") as f:
     annotation_neg = json.load(f)
 
 
-def get_circos(layout, hist_pos, hist_neg, annotation_pos, annotation_neg):
+def get_circos(
+    layout, hist_pos, hist_neg, hist2_pos, hist2_neg, annotation_pos, annotation_neg
+):
     return dashbio.Circos(
         id="circos",
         layout=layout,
@@ -54,6 +81,8 @@ def get_circos(layout, hist_pos, hist_neg, annotation_pos, annotation_neg):
             "1": "click",
             "2": "click",
             "3": "click",
+            "4": "click",
+            "5": "click",
         },
         size=800,
         config={
@@ -68,8 +97,8 @@ def get_circos(layout, hist_pos, hist_neg, annotation_pos, annotation_neg):
                     "tooltipContent": {"name": "value"},
                     "color": "#343d46",
                     "min": 0,
-                    "innerRadius": 1.01,
-                    "outerRadius": 1.4,
+                    "innerRadius": 0.9,
+                    "outerRadius": 0.99,
                     "labels": {"display": False},
                 },
             },
@@ -80,7 +109,29 @@ def get_circos(layout, hist_pos, hist_neg, annotation_pos, annotation_neg):
                     "tooltipContent": {"name": "value"},
                     "color": "#343d46",
                     "min": 0,
-                    "innerRadius": 0.99,
+                    "innerRadius": 0.89,
+                    "outerRadius": 0.8,
+                },
+            },
+            {
+                "type": "HISTOGRAM",
+                "data": hist2_pos,
+                "config": {
+                    "tooltipContent": {"name": "value"},
+                    "color": "#343d46",
+                    "min": 0,
+                    "innerRadius": 0.7,
+                    "outerRadius": 0.79,
+                },
+            },
+            {
+                "type": "HISTOGRAM",
+                "data": hist2_neg,
+                "config": {
+                    "tooltipContent": {"name": "value"},
+                    "color": "#343d46",
+                    "min": 0,
+                    "innerRadius": 0.69,
                     "outerRadius": 0.6,
                 },
             },
@@ -134,6 +185,7 @@ layout = html.Div(
             children=[html.Div(id="circos-div")],
         ),
         html.Div(id="event-data-select"),
+        html.Div(id="igv-data"),
     ]
 )
 
@@ -144,7 +196,9 @@ def render_circos(tab):
         return get_circos(
             layout_genome,
             histogram_data,
-            histogram_data,
+            histogram_neg,
+            pdg7_pos,
+            pdg7_neg,
             annotation_pos,
             annotation_neg,
         )
@@ -152,7 +206,9 @@ def render_circos(tab):
         return get_circos(
             layout_pbtic,
             histogram_pbtic,
-            histogram_pbtic,
+            histogram_pbtic_neg,
+            pdg7_pbtic_pos,
+            pdg7_pbtic_neg,
             annotation_pos,
             annotation_neg,
         )
@@ -166,3 +222,36 @@ def update_output(value):
     if value is not None:
         return [html.Div("{}: {}".format(v.title(), value[v])) for v in value.keys()]
     return "There is no event data. Click or hover on a data point to get more information."
+
+
+@app.callback(
+    Output("igv-data", "children"),
+    Input("circos", "eventDatum"),
+)
+def update_igv(value):
+    locus = f"{value['block_id']}:{value['start']}-{value['end']}"
+    return html.Div(
+        [
+            dashbio.Igv(
+                id="reference-igv",
+                locus=locus,
+                reference={
+                    "id": "BT",
+                    "name": "Bacillus",
+                    "fastaURL": "https://www.dropbox.com/s/d5l4y4l4jfdq1kb/genome.fasta?dl=0",
+                    "indexURL": "https://www.dropbox.com/s/oszr2wplvcipg81/genome.fasta.fai?dl=0",
+                    "order": 1000000,
+                    "tracks": [
+                        {
+                            "name": "Annotations",
+                            "url": "https://www.dropbox.com/s/uppcza47p94m4t0/annotation.gtf?dl=0",
+                            "displayMode": "EXPANDED",
+                            "nameField": "gene",
+                            "height": 150,
+                            "color": "rgb(176,141,87)",
+                        }
+                    ],
+                },
+            ),
+        ]
+    )
