@@ -1,0 +1,42 @@
+tracks = [
+    {
+        "name": "Annotations",
+        "url": "https://www.dropbox.com/s/cq2kr8v941gz4to/annotation_with_gil01.gtf?dl=0",
+        "displayMode": "EXPANDED",
+        "nameField": "gene",
+        "height": 150,
+        "color": "rgb(176,141,87)",
+    },
+    # {
+    #     "type": "wig",
+    #     "name": "G-t5-1 positive",
+    #     "autoscaleGroup": 1,
+    #     "url": "https://www.dropbox.com/s/geon6r82fcfjnxw/G-t5-1_coverage_-.bedgraph?dl=0",
+    #     "min": "0",
+    #     "color": "rgb(0, 0, 150)",
+    # },
+    # {
+    #     "type": "wig",
+    #     "name": "G-t5-1 negative",
+    #     "autoscaleGroup": 1,
+    #     "url": "https://www.dropbox.com/s/ma0nxz1g71xgba6/G-t5-1_coverage_%2B.bedgraph?dl=0",
+    #     "min": "0",
+    #     "color": "rgb(0, 0, 150)",
+    # },
+    # {
+    #     "type": "wig",
+    #     "name": "G-t5-2 positive",
+    #     "autoscaleGroup": 1,
+    #     "url": "https://www.dropbox.com/s/mo6fp2rq08plscb/G-t5-2_coverage_-.bedgraph?dl=0",
+    #     "min": "0",
+    #     "color": "rgb(0, 0, 150)",
+    # },
+    # {
+    #     "type": "wig",
+    #     "name": "G-t5-2 negative",
+    #     "autoscaleGroup": 1,
+    #     "url": "https://www.dropbox.com/s/jzdltvk0qz4cwc9/G-t5-2_coverage_%2B.bedgraph?dl=0",
+    #     "min": "0",
+    #     "color": "rgb(0, 0, 150)",
+    # },    
+]
